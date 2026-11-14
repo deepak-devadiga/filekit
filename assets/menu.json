@@ -1,0 +1,176 @@
+[
+  {
+    "title": "Formatter",
+    "icon": "code",
+    "children": [
+      {
+        "id": "js-format",
+        "title": "JavaScript (.js)",
+        "route": "/formatter/js",
+        "language": "javascript",
+        "mode": "format",
+        "extension": ".js",
+        "description": "Beautify and format JavaScript code using Prettier Babel parser."
+      },
+      {
+        "id": "ts-format",
+        "title": "TypeScript (.ts)",
+        "route": "/formatter/ts",
+        "language": "typescript",
+        "mode": "format",
+        "extension": ".ts",
+        "description": "Format TypeScript interfaces, types, and modules."
+      },
+      {
+        "id": "html-format",
+        "title": "HTML (.html)",
+        "route": "/formatter/html",
+        "language": "html",
+        "mode": "format",
+        "extension": ".html",
+        "description": "Clean up and indent HTML5 templates and Angular templates."
+      },
+      {
+        "id": "yaml-format",
+        "title": "YAML (.yaml)",
+        "route": "/formatter/yaml",
+        "language": "yaml",
+        "mode": "format",
+        "extension": ".yaml",
+        "description": "Validate and standardize indentation for YAML configuration files."
+      },
+      {
+        "id": "java-format",
+        "title": "Java (.java)",
+        "route": "/formatter/java",
+        "language": "java",
+        "mode": "format",
+        "extension": ".java",
+        "description": "Format Java classes, methods, and annotations directly in the browser."
+      },
+      {
+        "id": "json-format",
+        "title": "JSON (.json)",
+        "route": "/formatter/json",
+        "language": "json",
+        "mode": "format",
+        "extension": ".json",
+        "description": "Pretty-print or minify JSON payloads with syntax validation."
+      },
+      {
+        "id": "css-format",
+        "title": "CSS / SCSS (.scss)",
+        "route": "/formatter/scss",
+        "language": "scss",
+        "mode": "format",
+        "extension": ".scss",
+        "description": "Format stylesheets, media queries, and SCSS mixins."
+      },
+      {
+        "id": "xml-format",
+        "title": "XML (.xml)",
+        "route": "/formatter/xml",
+        "language": "xml",
+        "mode": "format",
+        "extension": ".xml",
+        "description": "Indent and structure XML files, Maven POMs, and SVG markup."
+      },
+      {
+        "id": "yaml-to-json",
+        "title": "YAML to JSON Converter",
+        "route": "/formatter/yaml-to-json",
+        "language": "yaml-to-json",
+        "mode": "convert",
+        "extension": ".json",
+        "description": "Convert YAML configuration files into formatted JSON."
+      },
+      {
+        "id": "json-to-yaml",
+        "title": "JSON to YAML Converter",
+        "route": "/formatter/json-to-yaml",
+        "language": "json-to-yaml",
+        "mode": "convert",
+        "extension": ".yaml",
+        "description": "Convert JSON objects into clean YAML files."
+      }
+    ]
+  },
+  {
+    "title": "Error Checker",
+    "icon": "shield-alert",
+    "children": [
+      {
+        "id": "js-check",
+        "title": "JavaScript Checker",
+        "route": "/checker/js",
+        "language": "javascript",
+        "mode": "validate",
+        "extension": ".js",
+        "description": "Detect syntax errors, loose equality, debugger statements, and quick-fix issues in JavaScript."
+      },
+      {
+        "id": "ts-check",
+        "title": "TypeScript Checker",
+        "route": "/checker/ts",
+        "language": "typescript",
+        "mode": "validate",
+        "extension": ".ts",
+        "description": "Inspect TypeScript code for AST syntax errors, explicit 'any' usage, and code quality issues."
+      },
+      {
+        "id": "html-check",
+        "title": "HTML Checker",
+        "route": "/checker/html",
+        "language": "html",
+        "mode": "validate",
+        "extension": ".html",
+        "description": "Identify unclosed HTML tags, missing alt attributes, and structural markup errors."
+      },
+      {
+        "id": "yaml-check",
+        "title": "YAML Checker",
+        "route": "/checker/yaml",
+        "language": "yaml",
+        "mode": "validate",
+        "extension": ".yaml",
+        "description": "Catch tab indentation errors, invalid mapping keys, and YAML syntax faults."
+      },
+      {
+        "id": "java-check",
+        "title": "Java Checker",
+        "route": "/checker/java",
+        "language": "java",
+        "mode": "validate",
+        "extension": ".java",
+        "description": "Check Java classes for parser syntax errors, missing semicolons, and System.out debug calls."
+      },
+      {
+        "id": "json-check",
+        "title": "JSON Checker",
+        "route": "/checker/json",
+        "language": "json",
+        "mode": "validate",
+        "extension": ".json",
+        "description": "Locate trailing commas, unquoted keys, single-quoted strings, and auto-repair broken JSON."
+      },
+      {
+        "id": "scss-check",
+        "title": "CSS / SCSS Checker",
+        "route": "/checker/scss",
+        "language": "scss",
+        "mode": "validate",
+        "extension": ".scss",
+        "description": "Find unclosed CSS blocks, invalid properties, empty rulesets, and !important overuse."
+      },
+      {
+        "id": "xml-check",
+        "title": "XML Checker",
+        "route": "/checker/xml",
+        "language": "xml",
+        "mode": "validate",
+        "extension": ".xml",
+        "description": "Validate XML well-formedness, mismatched closing tags, and unescaped ampersands."
+      }
+    ]
+  }
+]

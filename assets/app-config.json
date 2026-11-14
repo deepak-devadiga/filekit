@@ -1,0 +1,28 @@
+{
+  "appName": "FileKit",
+  "appSubtitle": "Code Studio",
+  "appLogo": {
+    "type": "text",
+    "value": "{ }",
+    "imageUrl": "assets/logo.svg"
+  },
+  "theme": {
+    "enableDarkLightToggle": true,
+    "enableThemePresets": true,
+    "defaultPreset": "dark"
+  },
+  "features": {
+    "enableFormatter": true,
+    "enableErrorChecker": true,
+    "enableMinify": true,
+    "enableFileUpload": true,
+    "enableFileDownload": true
+  },
+  "editorDefaults": {
+    "tabWidth": 2,
+    "printWidth": 80,
+    "useTabs": false,
+    "singleQuote": true,
+    "semi": true
+  }
+}
