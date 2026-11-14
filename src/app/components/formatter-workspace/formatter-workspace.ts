@@ -1,4 +1,5 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Title, Meta } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -21,6 +22,8 @@ export class FormatterWorkspace {
   private readonly menuService = inject(MenuService);
   private readonly formatterService = inject(FormatterService);
   protected readonly configService = inject(ConfigService);
+  private readonly titleService = inject(Title);
+  private readonly metaService = inject(Meta);
 
   readonly routeType = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('type') ?? 'js')),
@@ -59,10 +62,19 @@ export class FormatterWorkspace {
     effect(() => {
       const tool = this.activeTool();
       if (tool) {
-        this.errorMessage.set(null);
-        this.statusMessage.set(null);
-        this.outputCode.set('');
-        this.inputCode.set(this.formatterService.getSampleCode(tool.language));
+        const actionWord =
+          tool.mode === 'convert'
+            ? 'Converter'
+            : tool.mode === 'validate'
+              ? 'Checker'
+              : 'Formatter';
+        const pageTitle = `FileKit — Online ${tool.title} ${actionWord}`;
+        const pageDesc = tool.description;
+
+        this.titleService.setTitle(pageTitle);
+        this.metaService.updateTag({ name: 'description', content: pageDesc });
+        this.metaService.updateTag({ property: 'og:title', content: pageTitle });
+        this.metaService.updateTag({ property: 'og:description', content: pageDesc });
       }
     });
   }
