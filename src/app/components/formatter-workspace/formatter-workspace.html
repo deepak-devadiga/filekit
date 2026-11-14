@@ -1,0 +1,136 @@
+@if (activeTool(); as tool) {
+  <div class="workspace-container">
+    <!-- Top Header -->
+    <header class="workspace-header">
+      <div>
+        <span class="badge">{{ tool.mode === 'convert' ? 'Converter' : 'Formatter' }}</span>
+        <h1>{{ tool.title }}</h1>
+        <p>{{ tool.description }}</p>
+      </div>
+
+      <div class="file-actions">
+        <label class="btn btn-outline">
+          Upload File
+          <input type="file" (change)="onFileSelected($event)" hidden />
+        </label>
+        <button type="button" class="btn btn-outline" (click)="clearAll()">Clear</button>
+      </div>
+    </header>
+
+    <!-- Configuration Bar -->
+    <section class="options-bar">
+      <div class="option-group">
+        <label for="tabWidth">Indent Size</label>
+        <select id="tabWidth" [ngModel]="tabWidth()" (ngModelChange)="tabWidth.set($event)">
+          <option [ngValue]="2">2 Spaces</option>
+          <option [ngValue]="4">4 Spaces</option>
+          <option [ngValue]="8">8 Spaces</option>
+        </select>
+      </div>
+
+      <div class="option-group">
+        <label for="printWidth">Line Width</label>
+        <input
+          id="printWidth"
+          type="number"
+          min="40"
+          max="200"
+          [ngModel]="printWidth()"
+          (ngModelChange)="printWidth.set($event)"
+        />
+      </div>
+
+      <label class="checkbox-label">
+        <input type="checkbox" [ngModel]="useTabs()" (ngModelChange)="useTabs.set($event)" />
+        Use Tabs
+      </label>
+
+      @if (tool.language === 'javascript' || tool.language === 'typescript') {
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            [ngModel]="singleQuote()"
+            (ngModelChange)="singleQuote.set($event)"
+          />
+          Single Quotes
+        </label>
+
+        <label class="checkbox-label">
+          <input type="checkbox" [ngModel]="semi()" (ngModelChange)="semi.set($event)" />
+          Semicolons
+        </label>
+      }
+
+      <div class="primary-actions">
+        <button
+          type="button"
+          class="btn btn-primary"
+          [disabled]="isProcessing()"
+          (click)="runFormat()"
+        >
+          {{ tool.mode === 'convert' ? 'Convert Now' : 'Format Code' }}
+        </button>
+        @if (tool.mode === 'format') {
+          <button type="button" class="btn btn-secondary" (click)="runMinify()">Minify</button>
+        }
+      </div>
+    </section>
+
+    <!-- Status / Error Banners -->
+    @if (errorMessage()) {
+      <div class="alert alert-error"><strong>Error:</strong> {{ errorMessage() }}</div>
+    }
+    @if (statusMessage() && !errorMessage()) {
+      <div class="alert alert-success">
+        {{ statusMessage() }}
+      </div>
+    }
+
+    <!-- Split Editors -->
+    <section class="editor-grid">
+      <div class="editor-pane">
+        <div class="pane-header">
+          <span>Input ({{ tool.language | uppercase }})</span>
+          <span class="char-count">{{ inputCode().length }} chars</span>
+        </div>
+        <textarea
+          class="code-textarea"
+          placeholder="Paste or upload your code here..."
+          [ngModel]="inputCode()"
+          (ngModelChange)="inputCode.set($event)"
+          spellcheck="false"
+        ></textarea>
+      </div>
+
+      <div class="editor-pane">
+        <div class="pane-header">
+          <span>Output ({{ tool.extension }})</span>
+          <div class="pane-actions">
+            <button type="button" class="btn-sm" [disabled]="!outputCode()" (click)="copyOutput()">
+              Copy
+            </button>
+            <button
+              type="button"
+              class="btn-sm"
+              [disabled]="!outputCode()"
+              (click)="downloadOutput()"
+            >
+              Download {{ tool.extension }}
+            </button>
+          </div>
+        </div>
+        <textarea
+          class="code-textarea output-readonly"
+          placeholder="Formatted output will appear here..."
+          [ngModel]="outputCode()"
+          readonly
+          spellcheck="false"
+        ></textarea>
+      </div>
+    </section>
+  </div>
+} @else {
+  <div class="empty-state">
+    <h2>Select a formatter from the menu</h2>
+  </div>
+}

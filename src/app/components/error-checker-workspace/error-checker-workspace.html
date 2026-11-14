@@ -1,0 +1,142 @@
+@if (activeTool(); as tool) {
+  <div class="checker-container">
+    <!-- Top Header -->
+    <header class="checker-header">
+      <div>
+        <span class="badge">Error Checker &amp; Quick Fix</span>
+        <h1>{{ tool.title }}</h1>
+        <p>{{ tool.description }}</p>
+      </div>
+
+      <div class="header-actions">
+        <label class="btn btn-outline">
+          Upload File
+          <input type="file" (change)="onFileSelected($event)" hidden />
+        </label>
+        <button type="button" class="btn btn-primary" (click)="runCheck()">Scan for Issues</button>
+        @if (fixableIssuesCount() > 0) {
+          <button type="button" class="btn btn-fix-all" (click)="applyAllFixes()">
+            Fix All ({{ fixableIssuesCount() }})
+          </button>
+        }
+      </div>
+    </header>
+
+    <!-- Summary Bar -->
+    <section class="summary-strip">
+      <div class="stat-pill error">
+        <span class="dot"></span>
+        <strong>{{ errorCount() }}</strong> Errors
+      </div>
+      <div class="stat-pill warning">
+        <span class="dot"></span>
+        <strong>{{ warningCount() }}</strong> Warnings
+      </div>
+      <div class="stat-pill fixable">
+        <strong>{{ fixableIssuesCount() }}</strong> Auto-Fixable
+      </div>
+
+      @if (statusBanner()) {
+        <span class="status-toast">{{ statusBanner() }}</span>
+      }
+    </section>
+
+    <!-- Main Split View: Code & Highlighted Lines vs Diagnostics Panel -->
+    <section class="checker-grid">
+      <!-- Left: Code Input & Line Highlighter -->
+      <div class="code-panel">
+        <div class="panel-header">
+          <span>Source Code ({{ tool.extension }})</span>
+          <span>{{ codeLines().length }} lines</span>
+        </div>
+
+        <div class="editor-split">
+          <textarea
+            class="raw-editor"
+            [ngModel]="code()"
+            (ngModelChange)="code.set($event); runCheck()"
+            placeholder="Paste code to inspect for errors..."
+            spellcheck="false"
+          ></textarea>
+
+          <!-- Line-by-Line Highlight Preview -->
+          <div class="line-highlighter">
+            @for (lineText of codeLines(); track $index) {
+              @let lineNum = $index + 1;
+              @let sev = getLineSeverity(lineNum);
+              <div
+                class="code-line"
+                [class.line-error]="sev === 'error'"
+                [class.line-warning]="sev === 'warning'"
+                [class.line-selected]="selectedLine() === lineNum"
+                (click)="selectedLine.set(lineNum)"
+              >
+                <span class="line-num">{{ lineNum }}</span>
+                <span class="line-content">{{ lineText || ' ' }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Issues & Quick Fix Suggestions -->
+      <div class="diagnostics-panel">
+        <div class="panel-header">
+          <span>Detected Issues ({{ issues().length }})</span>
+        </div>
+
+        <div class="issues-list">
+          @if (issues().length === 0) {
+            <div class="clean-state">
+              <div class="check-badge">&#10003;</div>
+              <h3>No Issues Detected!</h3>
+              <p>Your {{ tool.title }} file passed syntax and static checks.</p>
+            </div>
+          } @else {
+            @for (issue of issues(); track issue.id) {
+              <article
+                class="issue-card"
+                [class.severity-error]="issue.severity === 'error'"
+                [class.severity-warning]="issue.severity === 'warning'"
+                [class.active-card]="selectedLine() === issue.line"
+                (click)="selectIssue(issue)"
+              >
+                <div class="issue-top">
+                  <span class="severity-tag">{{ issue.severity | uppercase }}</span>
+                  <span class="location-tag">Line {{ issue.line }}, Col {{ issue.column }}</span>
+                  <span class="rule-tag">{{ issue.rule }}</span>
+                </div>
+
+                <p class="issue-message">{{ issue.message }}</p>
+
+                @if (issue.problematicCode) {
+                  <pre class="code-snippet bad"><code>{{ issue.problematicCode }}</code></pre>
+                }
+
+                @if (issue.suggestion) {
+                  <div class="suggestion-box">
+                    <div class="suggestion-text">
+                      <strong>Suggested Fix:</strong> {{ issue.suggestion }}
+                    </div>
+
+                    @if (
+                      issue.fixedLineContent !== undefined || issue.fixedFullCode !== undefined
+                    ) {
+                      <button
+                        type="button"
+                        class="btn-apply-fix"
+                        (click)="applyFix(issue); $event.stopPropagation()"
+                      >
+                        Apply Fix
+                      </button>
+                    }
+                  </div>
+                }
+              </article>
+            }
+          }
+        </div>
+      </div>
+    </section>
+  </div>
+}
