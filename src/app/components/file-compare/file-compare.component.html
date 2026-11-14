@@ -1,0 +1,104 @@
+<div class="workspace-container">
+  <!-- Top Banner Card (Matching Formatter Banner) -->
+  <div class="banner-card">
+    <div class="banner-left">
+      <span class="badge">FILE COMPARE</span>
+      <h1 class="title">{{ titleText }}</h1>
+      <p class="description">{{ descriptionText }}</p>
+    </div>
+    <div class="banner-actions">
+      <button type="button" class="btn-primary" (click)="compareFiles()">Run Comparison</button>
+      <button type="button" class="btn-secondary" (click)="clearAll()">Clear</button>
+    </div>
+  </div>
+
+  <!-- Settings Toolbar Card (Matching Formatter Options Bar) -->
+  <div class="toolbar-card">
+    <div class="toolbar-group">
+      <label class="checkbox-label">
+        <input type="checkbox" [checked]="ignoreCase()" (change)="ignoreCase.set(!ignoreCase())" />
+        <span>Ignore Case</span>
+      </label>
+      <label class="checkbox-label">
+        <input
+          type="checkbox"
+          [checked]="ignoreWhitespace()"
+          (change)="ignoreWhitespace.set(!ignoreWhitespace())"
+        />
+        <span>Ignore Whitespace</span>
+      </label>
+    </div>
+  </div>
+
+  <!-- Dual Panes / Diff Results Section -->
+  @if (!hasCompared()) {
+    <div class="editors-grid">
+      <!-- Left Input Pane -->
+      <div class="editor-card">
+        <div class="editor-header">
+          <span class="pane-title">Input (ORIGINAL)</span>
+          <div class="header-right">
+            <span class="char-count">{{ leftCharCount() }} chars</span>
+            <label class="upload-btn">
+              Upload File A
+              <input type="file" (change)="onFileSelected($event, 'left')" hidden />
+            </label>
+          </div>
+        </div>
+        <textarea
+          [(ngModel)]="leftContent"
+          placeholder="Paste or upload original code here..."
+          spellcheck="false"
+        ></textarea>
+      </div>
+
+      <!-- Right Input Pane -->
+      <div class="editor-card">
+        <div class="editor-header">
+          <span class="pane-title">Input (MODIFIED)</span>
+          <div class="header-right">
+            <span class="char-count">{{ rightCharCount() }} chars</span>
+            <label class="upload-btn">
+              Upload File B
+              <input type="file" (change)="onFileSelected($event, 'right')" hidden />
+            </label>
+          </div>
+        </div>
+        <textarea
+          [(ngModel)]="rightContent"
+          placeholder="Paste or upload modified code here..."
+          spellcheck="false"
+        ></textarea>
+      </div>
+    </div>
+  } @else {
+    <!-- Diff Results View -->
+    <div class="diff-results-card">
+      <div class="diff-results-header">
+        <div class="diff-meta">
+          Comparing: <strong>{{ fileNameLeft() }}</strong> vs <strong>{{ fileNameRight() }}</strong>
+        </div>
+        <button type="button" class="btn-secondary sm" (click)="hasCompared.set(false)">
+          Edit Inputs
+        </button>
+      </div>
+
+      <div class="diff-viewer">
+        <div class="diff-table">
+          @for (row of diffRows(); track $index) {
+            <div class="diff-row">
+              <div class="diff-col left" [ngClass]="row.leftType">
+                <span class="line-no">{{ row.leftNum }}</span>
+                <span class="line-content">{{ row.leftText || ' ' }}</span>
+              </div>
+              <div class="diff-col right" [ngClass]="row.rightType">
+                <span class="line-no">{{ row.rightNum }}</span>
+                <span class="line-content">{{ row.rightText || ' ' }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

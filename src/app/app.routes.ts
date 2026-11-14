@@ -21,6 +21,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'compare/:type',
+    loadComponent: () =>
+      import('./components/file-compare/file-compare.component').then(
+        (m) => m.FileCompareComponent,
+      ),
+  },
+  {
     path: '**',
     redirectTo: 'formatter/js',
   },

@@ -70,12 +70,17 @@ export class ThemeService {
   constructor() {
     // Sync initial preset from ConfigService & localStorage
     effect(() => {
-      const themeCfg = this.configService.themeConfig();
+      const themeCfg = this.configService.themeConfig() as {
+        enableDarkLightToggle: boolean;
+        enableThemePresets: boolean;
+        defaultPreset?: ThemePresetId;
+      };
       const saved = localStorage.getItem(this.STORAGE_KEY) as ThemePresetId | null;
+      const defaultPreset: ThemePresetId = themeCfg.defaultPreset || 'dark';
 
       // If both switcher controls are disabled, enforce the config's defaultPreset
       if (!themeCfg.enableDarkLightToggle && !themeCfg.enableThemePresets) {
-        this.activePresetId.set(themeCfg.defaultPreset);
+        this.activePresetId.set(defaultPreset);
         return;
       }
 
@@ -84,7 +89,7 @@ export class ThemeService {
         if (saved === 'light' || saved === 'dark') {
           this.activePresetId.set(saved);
         } else {
-          this.activePresetId.set(themeCfg.defaultPreset === 'light' ? 'light' : 'dark');
+          this.activePresetId.set(defaultPreset === 'light' ? 'light' : 'dark');
         }
         return;
       }
@@ -92,7 +97,7 @@ export class ThemeService {
       if (saved && this.presets.some((p) => p.id === saved)) {
         this.activePresetId.set(saved);
       } else {
-        this.activePresetId.set(themeCfg.defaultPreset);
+        this.activePresetId.set(defaultPreset);
       }
     });
 
@@ -116,13 +121,12 @@ export class ThemeService {
   }
 
   toggleLightDark(): void {
-    if (!this.configService.themeConfig().enableDarkLightToggle) return;
+    const themeCfg = this.configService.themeConfig();
+    if (!themeCfg.enableDarkLightToggle) return;
     if (this.isDark()) {
       this.activePresetId.set('light');
     } else {
-      const targetDark = this.configService.themeConfig().enableThemePresets
-        ? this.lastDarkPreset
-        : 'dark';
+      const targetDark = themeCfg.enableThemePresets ? this.lastDarkPreset : 'dark';
       this.activePresetId.set(targetDark);
     }
   }

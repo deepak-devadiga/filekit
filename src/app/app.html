@@ -1,126 +1,192 @@
-<div class="app-shell">
-  <!-- Sidebar Navigation -->
-  <aside class="sidebar">
-    <div class="brand">
-      @let logo = configService.appLogo();
-      @if (logo.type === 'image' && logo.imageUrl) {
-        <img [src]="logo.imageUrl" [alt]="configService.appName()" class="brand-logo-img" />
-      } @else {
-        <span class="brand-logo">{{ logo.value }}</span>
-      }
-
-      <div class="brand-meta">
-        <span class="brand-title">{{ configService.appName() | uppercase }}</span>
-        <span class="brand-subtitle">{{ configService.appSubtitle() }}</span>
-      </div>
-      <span class="brand-dot" title="Active"></span>
+@if (!isDomainValid()) {
+  <!-- Unauthorized Fork Protection Overlay -->
+  <div class="unauthorized-overlay">
+    <div class="unauthorized-card">
+      <h2>⚠️ Unauthorized Deployment</h2>
+      <p>
+        This application instance is hosted on an unauthorized domain. Source code integrity and
+        branding protection are active.
+      </p>
+      <a
+        href="https://deepak-devadiga.github.io/filekit"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-primary"
+      >
+        Visit Official FileKit Studio
+      </a>
     </div>
+  </div>
+} @else {
+  <div class="app-shell" [class.mobile-menu-open]="isMobileMenuOpen()">
+    <!-- Mobile Top Header Bar -->
+    <header class="mobile-top-bar">
+      <button
+        type="button"
+        class="mobile-menu-toggle"
+        (click)="toggleMobileMenu()"
+        aria-label="Toggle Navigation Menu"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          width="24"
+          height="24"
+        >
+          @if (isMobileMenuOpen()) {
+            <path d="M18 6L6 18M6 6l12 12"></path>
+          } @else {
+            <path d="M3 12h18M3 6h18M3 18h18"></path>
+          }
+        </svg>
+      </button>
+      <div class="mobile-brand">
+        <app-logo />
+      </div>
+      <div class="mobile-top-actions">
+        <button
+          type="button"
+          class="mobile-theme-btn"
+          (click)="themeService.toggleLightDark()"
+          aria-label="Toggle theme"
+        >
+          {{ themeService.isDark() ? '☀️' : '🌙' }}
+        </button>
+      </div>
+    </header>
 
-    @if (menuService.loading()) {
-      <div class="menu-status">Loading menus...</div>
-    } @else if (menuService.error()) {
-      <div class="menu-status error">{{ menuService.error() }}</div>
-    } @else {
-      <nav class="menu-nav">
-        @for (category of visibleMenuCategories(); track category.title) {
-          <div class="menu-category">
-            <button type="button" class="category-header" (click)="toggleCategory(category.title)">
-              <span>{{ category.title }}</span>
-              <span class="chevron" [class.open]="isExpanded(category.title)">▾</span>
-            </button>
-
-            @if (isExpanded(category.title)) {
-              <ul class="submenu-list">
-                @for (item of category.children; track item.id) {
-                  <li>
-                    <a
-                      [routerLink]="item.route"
-                      routerLinkActive="active-link"
-                      class="submenu-link"
-                    >
-                      <span>{{ item.title }}</span>
-                      <span class="ext-pill">{{ item.extension }}</span>
-                    </a>
-                  </li>
-                }
-              </ul>
-            }
-          </div>
-        }
-      </nav>
+    <!-- Sidebar Backdrop Overlay for Mobile/Tablets -->
+    @if (isMobileMenuOpen()) {
+      <div class="sidebar-backdrop" (click)="closeMobileMenu()"></div>
     }
 
-    <!-- Conditionally Rendered Theme Footer -->
-    @let themeCfg = configService.themeConfig();
-    @if (themeCfg.enableThemePresets || themeCfg.enableDarkLightToggle) {
-      <div class="sidebar-footer">
-        @if (themeCfg.enableThemePresets) {
-          <div class="preset-header">
-            <span class="preset-label">Theme Presets</span>
-            <span class="preset-active-name">{{ themeService.activePreset().name }}</span>
-          </div>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" [class.open]="isMobileMenuOpen()">
+      <div class="brand p-3 desktop-brand">
+        <app-logo />
+      </div>
 
-          <div class="preset-swatches" role="radiogroup" aria-label="Color Theme Presets">
-            @for (preset of themeService.presets; track preset.id) {
+      @if (menuService.loading()) {
+        <div class="menu-status">Loading menus...</div>
+      } @else if (menuService.error()) {
+        <div class="menu-status error">{{ menuService.error() }}</div>
+      } @else {
+        <nav class="menu-nav">
+          @for (category of visibleMenuCategories(); track category.title) {
+            <div class="menu-category">
               <button
                 type="button"
-                class="swatch-btn"
-                [class.selected]="themeService.activePresetId() === preset.id"
-                [title]="preset.name"
-                [attr.aria-label]="preset.name"
-                [attr.aria-checked]="themeService.activePresetId() === preset.id"
-                role="radio"
-                (click)="themeService.setPreset(preset.id)"
+                class="category-header"
+                (click)="toggleCategory(category.title)"
               >
-                <span class="swatch-half" [style.background]="preset.primarySwatch"></span>
-                <span class="swatch-half" [style.background]="preset.accentSwatch"></span>
+                <span>{{ category.title }}</span>
+                <span class="chevron" [class.open]="isExpanded(category.title)">▾</span>
               </button>
-            }
-          </div>
-        }
 
-        @if (themeCfg.enableDarkLightToggle) {
-          <button
-            type="button"
-            class="theme-toggle-btn"
-            (click)="themeService.toggleLightDark()"
-            [attr.aria-label]="'Switch to ' + (themeService.isDark() ? 'light' : 'dark') + ' mode'"
-          >
-            @if (themeService.isDark()) {
-              <svg
-                class="theme-icon sun"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <circle cx="12" cy="12" r="5"></circle>
-                <path
-                  d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
-                ></path>
-              </svg>
-              <span>Switch to Daylight</span>
-            } @else {
-              <svg
-                class="theme-icon moon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-              </svg>
-              <span>Switch to Dark</span>
-            }
-            <span class="mode-pill">{{ themeService.isDark() ? 'DARK' : 'LIGHT' }}</span>
-          </button>
-        }
+              @if (isExpanded(category.title)) {
+                <ul class="submenu-list">
+                  @for (item of category.children; track item.id) {
+                    <li>
+                      <a
+                        [routerLink]="item.route"
+                        routerLinkActive="active-link"
+                        class="submenu-link"
+                        (click)="closeMobileMenu()"
+                      >
+                        <span>{{ item.title }}</span>
+                        <span class="ext-pill">{{ item.extension }}</span>
+                      </a>
+                    </li>
+                  }
+                </ul>
+              }
+            </div>
+          }
+        </nav>
+      }
+
+      <!-- Conditionally Rendered Theme Footer -->
+      @let themeCfg = configService.themeConfig();
+      @if (themeCfg.enableThemePresets || themeCfg.enableDarkLightToggle) {
+        <div class="sidebar-footer">
+          @if (themeCfg.enableThemePresets) {
+            <div class="preset-header">
+              <span class="preset-label">Theme Presets</span>
+              <span class="preset-active-name">{{ themeService.activePreset().name }}</span>
+            </div>
+
+            <div class="preset-swatches" role="radiogroup" aria-label="Color Theme Presets">
+              @for (preset of themeService.presets; track preset.id) {
+                <button
+                  type="button"
+                  class="swatch-btn"
+                  [class.selected]="themeService.activePresetId() === preset.id"
+                  [title]="preset.name"
+                  [attr.aria-label]="preset.name"
+                  [attr.aria-checked]="themeService.activePresetId() === preset.id"
+                  role="radio"
+                  (click)="themeService.setPreset(preset.id)"
+                >
+                  <span class="swatch-half" [style.background]="preset.primarySwatch"></span>
+                  <span class="swatch-half" [style.background]="preset.accentSwatch"></span>
+                </button>
+              }
+            </div>
+          }
+
+          @if (themeCfg.enableDarkLightToggle) {
+            <button
+              type="button"
+              class="theme-toggle-btn"
+              (click)="themeService.toggleLightDark()"
+              [attr.aria-label]="
+                'Switch to ' + (themeService.isDark() ? 'light' : 'dark') + ' mode'
+              "
+            >
+              @if (themeService.isDark()) {
+                <svg
+                  class="theme-icon sun"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="12" cy="12" r="5"></circle>
+                  <path
+                    d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+                  ></path>
+                </svg>
+                <span>Switch to Daylight</span>
+              } @else {
+                <svg
+                  class="theme-icon moon"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+                <span>Switch to Dark</span>
+              }
+              <span class="mode-pill">{{ themeService.isDark() ? 'DARK' : 'LIGHT' }}</span>
+            </button>
+          }
+        </div>
+      }
+    </aside>
+
+    <!-- Main Workspace with Footer Appended -->
+    <main class="main-content flex flex-col justify-between">
+      <div class="flex-1">
+        <router-outlet />
       </div>
-    }
-  </aside>
+      <app-footer />
+    </main>
 
-  <!-- Main Workspace -->
-  <main class="main-content">
-    <router-outlet />
-  </main>
-</div>
+    <!-- Buy Me A Coffee FAB & Modal Component -->
+    <app-buy-me-coffee />
+  </div>
+}

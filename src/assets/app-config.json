@@ -16,7 +16,8 @@
     "enableErrorChecker": true,
     "enableMinify": true,
     "enableFileUpload": true,
-    "enableFileDownload": true
+    "enableFileDownload": true,
+    "enableBuyMeACoffee": true
   },
   "editorDefaults": {
     "tabWidth": 2,

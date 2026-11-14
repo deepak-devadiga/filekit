@@ -9,6 +9,7 @@ import { MenuService } from '../../services/menu.service';
 import { FormatterService } from '../../services/formatter.service';
 import { ConfigService } from '../../services/config.service';
 import { FormatOptions, SubMenuItem } from '../../models/menu.model';
+import { BmcService } from '../../services/bmc.service';
 
 @Component({
   selector: 'app-formatter-workspace',
@@ -22,6 +23,7 @@ export class FormatterWorkspace {
   private readonly menuService = inject(MenuService);
   private readonly formatterService = inject(FormatterService);
   protected readonly configService = inject(ConfigService);
+  private readonly bmcService = inject(BmcService);
   private readonly titleService = inject(Title);
   private readonly metaService = inject(Meta);
 
@@ -101,6 +103,8 @@ export class FormatterWorkspace {
       this.statusMessage.set(
         tool.mode === 'convert' ? 'Conversion completed!' : 'Formatted successfully!',
       );
+
+      this.bmcService.recordOperation();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Syntax error while formatting.';
       this.errorMessage.set(msg);
@@ -118,6 +122,7 @@ export class FormatterWorkspace {
       const minified = this.formatterService.minifyContent(this.inputCode(), tool.language);
       this.outputCode.set(minified);
       this.statusMessage.set('Minified successfully!');
+      this.bmcService.recordOperation();
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Unable to minify content.';
       this.errorMessage.set(msg);

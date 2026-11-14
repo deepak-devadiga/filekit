@@ -7,6 +7,7 @@ import { map } from 'rxjs';
 import { MenuService } from '../../services/menu.service';
 import { ValidatorService } from '../../services/validator.service';
 import { SubMenuItem, ValidationIssue } from '../../models/menu.model';
+import { BmcService } from '../../services/bmc.service';
 
 @Component({
   selector: 'app-error-checker-workspace',
@@ -19,6 +20,7 @@ export class ErrorCheckerWorkspace {
   private readonly route = inject(ActivatedRoute);
   private readonly menuService = inject(MenuService);
   private readonly validatorService = inject(ValidatorService);
+  private readonly bmcService = inject(BmcService);
 
   readonly routeType = toSignal(
     this.route.paramMap.pipe(map((params) => params.get('type') ?? 'js')),
@@ -68,6 +70,7 @@ export class ErrorCheckerWorkspace {
     try {
       const results = await this.validatorService.validateCode(this.code(), tool.language);
       this.issues.set(results);
+      this.bmcService.recordOperation();
     } finally {
       this.isChecking.set(false);
     }

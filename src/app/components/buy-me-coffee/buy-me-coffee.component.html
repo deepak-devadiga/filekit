@@ -1,0 +1,40 @@
+@if (configService.features().enableBuyMeACoffee) {
+  <!-- Floating Action Button - 1.5x icon when unhovered, scales down to 1.2x on hover -->
+  <button
+    type="button"
+    class="bmc-fab-btn"
+    (click)="onClick()"
+    aria-label="Buy me a coffee"
+    title="Support FileKit Development"
+  >
+    <span class="bmc-icon">☕</span>
+    <span class="bmc-text">Buy me a coffee</span>
+  </button>
+}
+
+@if (bmcService.isModalOpen()) {
+  <!-- Modal Overlay -->
+  <div class="bmc-modal-backdrop" (click)="bmcService.closeModal()">
+    <div class="bmc-modal-card" (click)="$event.stopPropagation()">
+      <button type="button" class="bmc-close-btn" (click)="bmcService.closeModal()">×</button>
+
+      <div class="bmc-modal-header">
+        <div class="bmc-avatar">☕</div>
+        <h3>Support FileKit Studio</h3>
+        <p>
+          Enjoying lightning-fast client-side formatting and diffing? Fuel future updates and keep
+          FileKit free and open-source!
+        </p>
+      </div>
+
+      <div class="bmc-modal-actions">
+        <button type="button" class="btn-bmc-primary" (click)="openExternalLink()">
+          ☕ Support on Buy Me a Coffee
+        </button>
+        <button type="button" class="btn-bmc-secondary" (click)="bmcService.closeModal()">
+          Maybe Later
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -172,5 +172,47 @@
         "description": "Validate XML well-formedness, mismatched closing tags, and unescaped ampersands."
       }
     ]
+  },
+  {
+    "title": "File Compare",
+    "icon": "git-compare",
+    "children": [
+      {
+        "id": "js-compare",
+        "title": "JavaScript Diff",
+        "route": "/compare/js",
+        "language": "javascript",
+        "mode": "compare",
+        "extension": ".js",
+        "description": "Compare two JavaScript files or snippets side-by-side with line diffing."
+      },
+      {
+        "id": "ts-compare",
+        "title": "TypeScript Diff",
+        "route": "/compare/ts",
+        "language": "typescript",
+        "mode": "compare",
+        "extension": ".ts",
+        "description": "Compare TypeScript code side-by-side to inspect changes."
+      },
+      {
+        "id": "json-compare",
+        "title": "JSON Diff",
+        "route": "/compare/json",
+        "language": "json",
+        "mode": "compare",
+        "extension": ".json",
+        "description": "Compare JSON payloads side-by-side with additions and deletions highlighted."
+      },
+      {
+        "id": "yaml-compare",
+        "title": "YAML Diff",
+        "route": "/compare/yaml",
+        "language": "yaml",
+        "mode": "compare",
+        "extension": ".yaml",
+        "description": "Compare YAML configuration files side-by-side."
+      }
+    ]
   }
 ]
