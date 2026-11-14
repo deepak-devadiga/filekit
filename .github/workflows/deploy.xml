@@ -6,11 +6,13 @@ on:
       - main
   workflow_dispatch:
 
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Allow one concurrent deployment
 concurrency:
   group: 'pages'
   cancel-in-progress: true
@@ -31,17 +33,35 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build Angular application
-        # Replace /filekit/ with /YOUR_REPO_NAME/ if named differently
-        run: npx ng build --configuration production --base-href /filekit/
+      - name: Build Angular application for GitHub Pages
+        # Automatically sets --base-href to /<your-repo-name>/
+        run: npx ng build --configuration production --base-href "/${{ github.event.repository.name }}/"
 
-      - name: Copy index.html to 404.html for Angular Router support
-        run: cp dist/filekit/browser/index.html dist/filekit/browser/404.html
+      - name: Prepare artifact (404.html & .nojekyll)
+        id: find_dist
+        run: |
+          # Automatically find the exact folder inside dist/ where index.html was generated
+          INDEX_FILE=$(find dist -name "index.html" | head -n 1)
+          if [ -z "$INDEX_FILE" ]; then
+            echo "❌ Error: index.html not found inside dist/"
+            exit 1
+          fi
+          BUILD_DIR=$(dirname "$INDEX_FILE")
+          echo "✅ Found build output in: $BUILD_DIR"
+
+          # Copy index.html to 404.html so Angular deep routes work on refresh
+          cp "$BUILD_DIR/index.html" "$BUILD_DIR/404.html"
+
+          # Add .nojekyll so GitHub Pages serves all files without Jekyll filtering
+          touch "$BUILD_DIR/.nojekyll"
+
+          # Pass the detected directory to the upload step
+          echo "build_dir=$BUILD_DIR" >> $GITHUB_OUTPUT
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: dist/filekit/browser
+          path: ${{ steps.find_dist.outputs.build_dir }}
 
   deploy:
     needs: build
