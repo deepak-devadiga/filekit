@@ -11,8 +11,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:ci": "ng test --watch=false --browsers=ChromeHeadless",
-    "deploy": "ng deploy --base-href=/filekit/",
-    "deploy:dry": "ng deploy --base-href=/filekit/ --dry-run",
+    "deploy": "git push origin HEAD",
     "clean": "rm -rf dist .angular"
   },
   "private": true,
@@ -25,6 +24,7 @@
     "@angular/platform-browser": "^22.1.0",
     "@angular/router": "^22.1.0",
     "js-yaml": "^5.5.0",
+    "prettier": "^3.10.1",
     "prettier-plugin-java": "^2.11.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
@@ -36,7 +36,6 @@
     "@types/js-yaml": "^4.0.9",
     "angular-cli-ghpages": "^3.1.2",
     "jsdom": "^28.0.0",
-    "prettier": "^3.10.1",
     "typescript": "~6.0.2",
     "vitest": "^4.0.8"
   }
