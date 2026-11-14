@@ -11,7 +11,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:ci": "ng test --watch=false --browsers=ChromeHeadless",
-    "deploy": "git push origin main",
+    "deploy": "ng deploy --base-href=/filekit/",
+    "deploy:dry": "ng deploy --base-href=/filekit/ --dry-run",
     "clean": "rm -rf dist .angular"
   },
   "private": true,
