@@ -1,6 +1,4 @@
 import { Routes } from '@angular/router';
-import { FormatterWorkspace } from './components/formatter-workspace/formatter-workspace';
-import { ErrorCheckerWorkspace } from './components/error-checker-workspace/error-checker-workspace';
 
 export const routes: Routes = [
   {
@@ -10,11 +8,17 @@ export const routes: Routes = [
   },
   {
     path: 'formatter/:type',
-    component: FormatterWorkspace,
+    loadComponent: () =>
+      import('./components/formatter-workspace/formatter-workspace').then(
+        (m) => m.FormatterWorkspace,
+      ),
   },
   {
     path: 'checker/:type',
-    component: ErrorCheckerWorkspace,
+    loadComponent: () =>
+      import('./components/error-checker-workspace/error-checker-workspace').then(
+        (m) => m.ErrorCheckerWorkspace,
+      ),
   },
   {
     path: '**',
