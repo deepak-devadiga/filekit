@@ -1,41 +1,61 @@
 {
-  // For more information, visit: https://go.microsoft.com/fwlink/?LinkId=733558
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "FileKit: Start Dev Server",
       "type": "npm",
       "script": "start",
       "isBackground": true,
-      "problemMatcher": {
-        "owner": "typescript",
-        "pattern": "$tsc",
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": {
-            "regexp": "Changes detected"
-          },
-          "endsPattern": {
-            "regexp": "bundle generation (complete|failed)"
-          }
-        }
+      "problemMatcher": "$tsc-watch",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "group": "dev"
       }
     },
     {
+      "label": "FileKit: Build Production",
       "type": "npm",
-      "script": "test",
-      "isBackground": true,
-      "problemMatcher": {
-        "owner": "typescript",
-        "pattern": "$tsc",
-        "background": {
-          "activeOnStart": true,
-          "beginsPattern": {
-            "regexp": "Changes detected"
-          },
-          "endsPattern": {
-            "regexp": "bundle generation (complete|failed)"
-          }
-        }
+      "script": "build:prod",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": "$tsc",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "FileKit: Deploy to GitHub Pages",
+      "type": "npm",
+      "script": "deploy",
+      "problemMatcher": "$tsc",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      }
+    },
+    {
+      "label": "FileKit: Deploy Dry Run (Test Deploy)",
+      "type": "npm",
+      "script": "deploy:dry",
+      "problemMatcher": "$tsc",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "FileKit: Clean Cache & Dist",
+      "type": "npm",
+      "script": "clean",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "Always",
+        "panel": "shared"
       }
     }
   ]
