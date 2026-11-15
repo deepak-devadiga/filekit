@@ -45,6 +45,19 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+
+  <url>
+    <loc>https://deepak-devadiga.github.io/filekit/formatter/yaml-to-json</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://deepak-devadiga.github.io/filekit/formatter/json-to-yaml</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+
   <url>
     <loc>https://deepak-devadiga.github.io/filekit/checker/js</loc>
     <changefreq>monthly</changefreq>
@@ -52,6 +65,56 @@
   </url>
   <url>
     <loc>https://deepak-devadiga.github.io/filekit/checker/ts</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://deepak-devadiga.github.io/filekit/checker/html</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://deepak-devadiga.github.io/filekit/checker/yaml</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://deepak-devadiga.github.io/filekit/checker/java</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://deepak-devadiga.github.io/filekit/checker/json</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://deepak-devadiga.github.io/filekit/checker/scss</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://deepak-devadiga.github.io/filekit/checker/xml</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://deepak-devadiga.github.io/filekit/compare/js</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://deepak-devadiga.github.io/filekit/compare/ts</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://deepak-devadiga.github.io/filekit/compare/json</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://deepak-devadiga.github.io/filekit/compare/yaml</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
